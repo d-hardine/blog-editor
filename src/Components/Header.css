@@ -1,0 +1,22 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 200px;
+    background-color: #91ADC8;
+    color: #3F3F3F;
+}
+
+.header-left-container, .header-right-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.header-left-container {
+    font-family: Caveat;
+    text-decoration: none;
+    color: inherit;
+    font-size: 40px;
+    font-family: Caveat;
+    font-weight: bolder;
+}

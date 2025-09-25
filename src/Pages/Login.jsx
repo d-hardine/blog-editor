@@ -1,12 +1,38 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import axios from "axios"
-import { useNavigate } from "react-router"
+import { useNavigate, useOutletContext } from "react-router"
 
 export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const navigate = useNavigate()
+
+  const [headerUsername, setHeaderUsername] = useOutletContext()
+
+  const fetchAuth = async () => {
+    const token = localStorage.getItem('jwtToken')
+    if(token) {
+      try {
+        const response = await axios.get('/api/auth', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        if(response.status === 200) {
+          setHeaderUsername(response.data.username)
+          navigate('/dashboard')
+        }
+      } catch (error) {
+          localStorage.clear()
+          navigate('/')
+      }
+    }
+  }
+
+  useEffect(() => {
+    fetchAuth()
+  }, [])
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -17,6 +43,7 @@ export default function Login() {
     const response = await axios.post('/api/editor-login', loginAttemptUser)
     if(response.status === 200) {
       localStorage.setItem("jwtToken", response.data.token)
+      setHeaderUsername(response.data.username)
       navigate('/dashboard')
     }
   }

@@ -1,0 +1,11 @@
+footer {
+    background-color: #91ADC8;
+    text-align: center;
+    color: #3f3f3f;
+}
+
+.contact-footer {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
