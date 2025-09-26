@@ -6,6 +6,8 @@ import Login from './Pages/Login.jsx'
 import App from './App.jsx'
 import Dashboard from './Pages/Dashboard.jsx'
 import Unauthorized from './Pages/Unauthorized.jsx'
+import Article from './Pages/Article.jsx'
+import BlogEditor from './Pages/BlogEditor.jsx'
 
 const router = createBrowserRouter([
   {
@@ -15,6 +17,8 @@ const router = createBrowserRouter([
       {index: true, element: <Login />},
       {path: 'dashboard', element: <Dashboard />},
       {path: 'unauthorized', element: <Unauthorized />},
+      {path: 'article/:articleId', element: <Article />},
+      {path: 'editor', element: <BlogEditor />},
     ]
   }
 ])

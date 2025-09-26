@@ -1,8 +1,9 @@
 import axios from "axios"
 import { useEffect, useState, Fragment } from "react"
-import { useNavigate, useOutletContext } from "react-router"
-import { format, formatDate } from "date-fns"
+import { useNavigate, useOutletContext, Link } from "react-router"
+import { formatDate } from "date-fns"
 import './Dashboard.css'
+import PageTitle from "../Components/PageTitle"
 
 export default function Dashboard() {
     const [user, setUser] = useState()
@@ -46,26 +47,31 @@ export default function Dashboard() {
     }, [])
 
     return (
-        <main>
+        <>
             {user && (
                 <>
-                    <h1>Hello {user.firstName}!</h1>
-                    <div className="article-container">
-                        <div><b>Title</b></div>
-                        <div><b>created at</b></div>
-                        <div><b>updated at</b></div>
-                        <div><b>is published</b></div>
-                        {articles.map(article => (
-                            <Fragment key={article.id}>
-                                <div>{article.title}</div>
-                                <div>{formatDate(article.createdAt, 'dd MMM yyyy, HH:mm')}</div>
-                                <div>{formatDate(article.updatedAt, 'dd MMM yyyy, HH:mm')}</div>
-                                <div>{`${article.published}`}</div>
-                            </Fragment>
-                        ))}
-                    </div>
+                    <PageTitle title={`${user.username}'s Dashboard | Hardine Blog for Writer/Editor`}/>
+                    <main className="dashboard-main">
+                        <h1>Hello {user.firstName}!</h1>
+                        <div className="article-container">
+                            <div><b>Title</b></div>
+                            <div><b>created at</b></div>
+                            <div><b>updated at</b></div>
+                            <div><b>is published</b></div>
+                            {articles.map(article => (
+                                <Fragment key={article.id}>
+                                    <Link to={`/article/${article.id}`}>{article.title}</Link>
+                                    <div>{formatDate(article.createdAt, 'dd MMM yyyy, HH:mm')}</div>
+                                    <div>{formatDate(article.updatedAt, 'dd MMM yyyy, HH:mm')}</div>
+                                    <div>{`${article.published}`}</div>
+                                </Fragment>
+                            ))}
+                        </div>
+                        <br />
+                        <Link to="/editor"><button>Create New Article</button></Link>
+                    </main>
                 </>
             )}
-        </main>
+        </>
     )
 }
