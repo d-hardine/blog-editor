@@ -29,7 +29,7 @@ export default function Dashboard() {
                     } else {
                         setUser(response.data)
                         setHeaderUsername(response.data.username)
-                        const articles = await axios.get(`/api/get-articles/${response.data.id}`)
+                        const articles = await axios.get(`/api/get-articles/${response.data.id}`) //get articles for specific account
                         setArticles(articles.data)
                     }
                 }
@@ -46,24 +46,40 @@ export default function Dashboard() {
         fetchAuthAndArticles()
     }, [])
 
+    const handlePublishing =  async (articleId, publishBool) => {
+        await axios.put('api/update-publish', {articleId, publishBool}) //update the published bool
+        const articles = await axios.get(`/api/get-articles/${user.id}`) //get articles for specific account
+        setArticles(articles.data)
+    }
+
+    const handleDeleteArticle = async (articleId) => {
+        await axios.delete('api/delete-article', {data: {articleId}}) //delete the specific article
+        const articles = await axios.get(`/api/get-articles/${user.id}`) //get articles for specific account
+        setArticles(articles.data)
+    }
+
     return (
         <>
             {user && (
                 <>
                     <PageTitle title={`${user.username}'s Dashboard | Hardine Blog for Writer/Editor`}/>
                     <main className="dashboard-main">
-                        <h1>Hello {user.firstName}!</h1>
+                        <h1>This is all of your articles {user.firstName}!</h1>
                         <div className="article-container">
                             <div><b>Title</b></div>
-                            <div><b>created at</b></div>
-                            <div><b>updated at</b></div>
-                            <div><b>is published</b></div>
+                            <div><b>Category</b></div>
+                            <div><b>Created</b></div>
+                            <div><b>Updated</b></div>
+                            <div><b>Published</b></div>
+                            <div><b>Action</b></div>
                             {articles.map(article => (
                                 <Fragment key={article.id}>
                                     <Link to={`/article/${article.id}`}>{article.title}</Link>
+                                    <div>{article.categories[0].name}</div>
                                     <div>{formatDate(article.createdAt, 'dd MMM yyyy, HH:mm')}</div>
                                     <div>{formatDate(article.updatedAt, 'dd MMM yyyy, HH:mm')}</div>
-                                    <div>{`${article.published}`}</div>
+                                    <div onClick={() => handlePublishing(article.id, article.published)}>{`${article.published}`}</div>
+                                    <button onClick={() => handleDeleteArticle(article.id)}>DELETE</button>
                                 </Fragment>
                             ))}
                         </div>

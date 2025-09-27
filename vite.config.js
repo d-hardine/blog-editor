@@ -10,6 +10,7 @@ export default defineConfig({
         target: 'http://localhost:8100',
         secure: false
       }
-    }
+    },
+    port: 4217,
   }
 })

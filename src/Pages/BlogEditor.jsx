@@ -75,10 +75,10 @@ export default function App() {
       <br />
       <br />
       <label htmlFor="select-category">Category</label><br />
-      <select name="select-category" id="editor-select-category" onChange={(e) => setCategoryId(e.target.value)}>
-        <option value={4}>Smartphone</option>
-        <option value={5}>Computer</option>
-        <option value={6}>Tablet</option>
+      <select name="select-category" id="editor-select-category" onChange={(e) => setCategoryId(Number(e.target.value))}>
+        <option value="4">Smartphone</option>
+        <option value="5">Computer</option>
+        <option value="6">Tablet</option>
       </select>
       <br />
       <br />
@@ -86,7 +86,7 @@ export default function App() {
       <Editor
         apiKey= {import.meta.env.VITE_TINYMCE_API_KEY}
         onInit={ (_evt, editor) => editorRef.current = editor }
-        initialValue="test"
+        initialValue="write your article here"
         init={{
           height: 500,
           menubar: false,
