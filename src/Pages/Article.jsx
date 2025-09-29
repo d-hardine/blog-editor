@@ -18,6 +18,8 @@ export default function Article() {
 
     const [headerUsername, setHeaderUsername] = useOutletContext()
 
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8100'
+
     //TinyMCE stuff
     const editorRef = useRef(null);
     const log = () => {
@@ -34,7 +36,7 @@ export default function Article() {
         const token = localStorage.getItem('jwtToken')
         if(token) {
             try {
-                const response = await axios.get('/api/editor-auth', {
+                const response = await axios.get(`${API_BASE_URL}/api/editor-auth`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -58,7 +60,7 @@ export default function Article() {
     }
 
     async function fetchArticle() {
-        const response = await axios.get(`/api/getArticle/${pageParams.articleId}`)
+        const response = await axios.get(`${API_BASE_URL}/api/getArticle/${pageParams.articleId}`)
         setArticle(response.data)
     }
 
@@ -72,7 +74,7 @@ export default function Article() {
     }
 
     const handleEditArticle = async () => {
-        const response = await axios.put(`/api/update-article/${pageParams.articleId}`, {
+        const response = await axios.put(`${API_BASE_URL}/api/update-article/${pageParams.articleId}`, {
             editorTitle,
             categoryId,
             editorBody: editorRef.current.getContent()
@@ -83,7 +85,7 @@ export default function Article() {
         })
         console.log(response.data)
         if(response.status === 200) {
-            const response = await axios.get(`/api/getArticle/${pageParams.articleId}`)
+            const response = await axios.get(`${API_BASE_URL}/api/getArticle/${pageParams.articleId}`)
             setArticle(response.data)
             setIsEditMode(false)
         }

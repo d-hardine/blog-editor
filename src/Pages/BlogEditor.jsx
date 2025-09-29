@@ -10,6 +10,8 @@ export default function App() {
 
   const [headerUsername, setHeaderUsername] = useOutletContext()
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8100'
+
   const navigate = useNavigate()
 
   //TinyMCE stuff
@@ -25,7 +27,7 @@ export default function App() {
     const token = localStorage.getItem('jwtToken')
     if(token) {
       try {
-        const response = await axios.get('/api/editor-auth', {
+        const response = await axios.get(`${API_BASE_URL}/api/editor-auth`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -54,7 +56,7 @@ export default function App() {
   },[])
 
   const handleCreateArticle = async () => {
-    const response = await axios.post('/api/create-article', {
+    const response = await axios.post(`${API_BASE_URL}/api/create-article`, {
       editorTitle,
       categoryId,
       editorBody: editorRef.current.getContent()

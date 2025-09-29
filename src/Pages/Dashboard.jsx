@@ -11,13 +11,15 @@ export default function Dashboard() {
 
     const navigate = useNavigate()
 
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8100'
+
     const [headerUsername, setHeaderUsername] = useOutletContext()
 
     async function fetchAuthAndArticles() {
         const token = localStorage.getItem('jwtToken')
         if(token) {
             try {
-                const response = await axios.get('/api/editor-auth', {
+                const response = await axios.get(`${API_BASE_URL}/api/editor-auth`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -29,7 +31,7 @@ export default function Dashboard() {
                     } else {
                         setUser(response.data)
                         setHeaderUsername(response.data.username)
-                        const articles = await axios.get(`/api/get-articles/${response.data.id}`) //get articles for specific account
+                        const articles = await axios.get(`${API_BASE_URL}/api/get-articles/${response.data.id}`) //get articles for specific account
                         setArticles(articles.data)
                     }
                 }
@@ -47,14 +49,14 @@ export default function Dashboard() {
     }, [])
 
     const handlePublishing =  async (articleId, publishBool) => {
-        await axios.put('api/update-publish', {articleId, publishBool}) //update the published bool
-        const articles = await axios.get(`/api/get-articles/${user.id}`) //get articles for specific account
+        await axios.put(`${API_BASE_URL}/api/update-publish`, {articleId, publishBool}) //update the published bool
+        const articles = await axios.get(`${API_BASE_URL}/api/get-articles/${user.id}`) //get articles for specific account
         setArticles(articles.data)
     }
 
     const handleDeleteArticle = async (articleId) => {
-        await axios.delete('api/delete-article', {data: {articleId}}) //delete the specific article
-        const articles = await axios.get(`/api/get-articles/${user.id}`) //get articles for specific account
+        await axios.delete(`${API_BASE_URL}api/delete-article`, {data: {articleId}}) //delete the specific article
+        const articles = await axios.get(`${API_BASE_URL}/api/get-articles/${user.id}`) //get articles for specific account
         setArticles(articles.data)
     }
 

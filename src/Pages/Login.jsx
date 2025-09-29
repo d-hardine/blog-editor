@@ -9,13 +9,15 @@ export default function Login() {
 
   const navigate = useNavigate()
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8100'
+
   const [headerUsername, setHeaderUsername] = useOutletContext()
 
   const fetchAuth = async () => {
     const token = localStorage.getItem('jwtToken')
     if(token) {
       try {
-        const response = await axios.get('/api/auth', {
+        const response = await axios.get(`${API_BASE_URL}/api/auth`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -41,7 +43,7 @@ export default function Login() {
       username,
       password,
     }
-    const response = await axios.post('/api/editor-login', loginAttemptUser)
+    const response = await axios.post(`${API_BASE_URL}/api/editor-login`, loginAttemptUser)
     if(response.status === 200) {
       localStorage.setItem("jwtToken", response.data.token)
       setHeaderUsername(response.data.username)
